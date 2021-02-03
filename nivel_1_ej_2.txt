@@ -1,0 +1,16 @@
+//ejercicios modulo 2 bbdd mongodb NIVEL 1
+db.restaurants.find().pretty() //consulta 1
+db.restaurants.find({},{restaurant_id:1, name:1, borough:1,cuisine:1}).pretty() //2
+db.restaurants.find({},{restaurant_id:1, name:1, borough:1,cuisine:1,_id:0}).pretty() //3
+db.restaurants.find({},{restaurant_id:1, name:1, borough:1,address:{zipcode:1},_id:0}) //4
+db.restaurants.find({borough:"Bronx"}) //5
+db.restaurants.find({borough:"Bronx"}).limit(5) //6  
+db.restaurants.find({borough:"Bronx"}).limit(5).skip(5) //7
+db.restaurants.aggregate([{$unwind:{path:'$grades'}},{$group:{_id:'$restaurant_id',total_score:{$sum:'$grades.score'}}},{$match:{total_score:{$gt:90}}}]) //8
+db.restaurants.aggregate([{$unwind:{path:'$grades'}},{$group:{_id:'$restaurant_id',total_score:{$sum:'$grades.score'}}},{$match:{total_score:{$gt:80,$lt:100}}}]) //9
+db.restaurants.find({"address.coord.0":{$lt:-95.754168}}) //10
+db.restaurants.aggregate([{$unwind:{path:'$grades'}},{$group:{_id:'$restaurant_id',total_score:{$sum:'$grades.score'},Name:{$first:"$name"},Cuisine:{$first:"$cuisine"},Coordenadas:{$min:"$address.coord"},restaurant_id:{$min:"$restaurant_id"}}},{$match:{$and:[{"total_score":{$gt:70},"Cuisine":{$nin:["American ","American"]},"Coordenadas.0":{$lt:-65.754168}}]}}]).prettt() //11
+db.restaurants.aggregate([{$unwind:{path:'$grades'}},{$group:{_id:'$restaurant_id',total_score:{$sum:'$grades.score'},Name:{$first:"$name"},Cuisine:{$first:"$cuisine"},Coordenadas:{$min:"$address.coord"},restaurant_id:{$min:"$restaurant_id"}}},{$match:{"total_score":{$gt:70},"Cuisine":{$nin:["American ","American"]},"Coordenadas.0":{$lt:-65.754168}}}]).pretty() //12
+
+
+
